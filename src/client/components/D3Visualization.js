@@ -65,7 +65,7 @@ const D3Visualization = ({ data, displayOptions }) => {
     yAxis.selectAll('path').style('stroke', AXIS_COLOR);
     yAxis.selectAll('text').style('stroke', AXIS_COLOR);
 
-    // Bars
+    // Add Bars
     if (showCumulativeTotal) {
       svg
         .selectAll('bar')
