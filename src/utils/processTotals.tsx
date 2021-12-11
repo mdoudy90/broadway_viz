@@ -12,6 +12,12 @@ const processTotals = (data, weeklyExpense = 0) => {
     return memo;
   }, {});
 
+  const stats = {
+    daysProfitable: Object.keys(totals).length,
+    daysSustainable: Object.keys(totals).length,
+    maxProfit: 0,
+  };
+
   let runningCumulative = 0;
   let zeroOut = false;
 
@@ -19,17 +25,30 @@ const processTotals = (data, weeklyExpense = 0) => {
     runningCumulative +=
       (zeroOut ? 0 : totals[key].weeklyTotal) - weeklyExpense;
     totals[key].cumulativeTotal = runningCumulative;
+    stats.maxProfit = Math.max(stats.maxProfit, runningCumulative);
 
     totals[key].weeklyTotal -= weeklyExpense;
 
-    // zero out all values following a negative
-    if (totals[key].weeklyTotal < 0 || zeroOut) {
+    if (
+      totals[key].cumulativeTotal < 0 &&
+      stats.daysSustainable === Object.keys(totals).length
+    ) {
+      stats.daysSustainable = totals[key].show_week - 1;
+    }
+
+    if (totals[key].weeklyTotal < 0 && !zeroOut) {
+      stats.daysProfitable = totals[key].show_week - 1;
       totals[key].weeklyTotal = 0;
       zeroOut = true;
     }
+
+    // zero out all values following a negative
+    if (zeroOut) {
+      totals[key].weeklyTotal = 0;
+    }
   });
 
-  return Object.values(totals);
+  return { processedTotals: Object.values(totals), processedStats: stats };
 };
 
 export default processTotals;

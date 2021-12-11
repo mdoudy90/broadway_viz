@@ -1,7 +1,5 @@
-const StatsCard = ({}) => {
-  const [daysProfitable, daysSustainable, maxProfit] = [14, 18, 43200230];
-  // TODO - Gather above data
-
+const StatsCard = ({ stats }) => {
+  const { daysProfitable, daysSustainable, maxProfit } = stats;
   return (
     <div className='stats-card'>
       <div className='stats-card__stat'>
@@ -14,7 +12,7 @@ const StatsCard = ({}) => {
       </div>
       <div className='stats-card__stat'>
         <p>Max Profit</p>
-        <p>{maxProfit}</p>
+        <p>${Intl.NumberFormat().format(maxProfit)}</p>
       </div>
     </div>
   );

@@ -5,10 +5,13 @@ const AXIS_COLOR = 'rgb(255, 91, 73)';
 const BAR_COLOR_1 = '#43b4c2';
 const BAR_COLOR_2 = '#fff';
 
-const D3Visualization = ({ data, dimensions, displayOptions }) => {
+const D3Visualization = ({ data, displayOptions }) => {
   const svgRef = useRef(null);
   const { showCumulativeTotal, showWeeklyTotal } = displayOptions;
-  const { svgWidth, svgHeight, margin } = dimensions;
+
+  const margin = { top: 30, right: 30, bottom: 30, left: 80 };
+  const svgWidth = 480;
+  const svgHeight = 380;
 
   const width = svgWidth - margin.left - margin.right;
   const height = svgHeight - margin.top - margin.bottom;
@@ -90,11 +93,7 @@ const D3Visualization = ({ data, dimensions, displayOptions }) => {
 
   return (
     <div className='d3-visualization'>
-      <svg
-        ref={svgRef}
-        width={width + margin.left + margin.right}
-        height={height + margin.top + margin.bottom}
-      />
+      <svg ref={svgRef} width={svgWidth} height={svgHeight} />
     </div>
   );
 };
