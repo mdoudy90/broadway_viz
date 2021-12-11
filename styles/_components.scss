@@ -10,7 +10,7 @@
 .stats-card,
 .legend-card {
   border: 1px solid $orange;
-  background-color: rgba(255, 91, 73, 0.1);
+  background-color: transparentize($color: $orange, $amount: 0.9);
   border-radius: 3px;
   padding: 12px;
 }
@@ -83,13 +83,13 @@
   &--cum-total {
     .MuiSwitch-root {
       .MuiSwitch-switchBase {
-        color: #adadad;
+        color: $gray;
       }
       .Mui-checked {
-        color: #43b4c2;
+        color: $light-blue;
       }
       .MuiSwitch-track {
-        background-color: #43b4c2;
+        background-color: $light-blue;
       }
     }
   }
@@ -97,13 +97,13 @@
   &--week-total {
     .MuiSwitch-root {
       .MuiSwitch-switchBase {
-        color: #adadad;
+        color: $gray;
       }
       .Mui-checked {
         color: $white;
       }
       .MuiSwitch-track {
-        background-color: $white;
+        background-color: $light-blue;
       }
     }
   }

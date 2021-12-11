@@ -1,5 +1,6 @@
 const StatsCard = ({ stats }) => {
   const { daysProfitable, daysSustainable, maxProfit } = stats;
+
   return (
     <div className='stats-card'>
       <div className='stats-card__stat'>
