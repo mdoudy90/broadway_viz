@@ -7,7 +7,7 @@ const processTotals = (data, weeklyExpense = 0) => {
     if (!(show_week in memo)) {
       memo[show_week] = { show_week, weeklyTotal: 0 };
     }
-    memo[show_week].weeklyTotal += gross - weeklyExpense;
+    memo[show_week].weeklyTotal += gross;
 
     return memo;
   }, {});
@@ -15,13 +15,11 @@ const processTotals = (data, weeklyExpense = 0) => {
   let runningCumulative = 0;
 
   Object.keys(totals).map((key) => {
+    totals[key].weeklyTotal -= weeklyExpense;
+
     runningCumulative += totals[key].weeklyTotal;
     totals[key].cumulativeTotal = runningCumulative;
   });
-
-  // each week
-  // total gross
-  // cumulative gross
 
   return Object.values(totals);
 };

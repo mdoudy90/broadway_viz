@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
+import Switch from '@mui/material/Switch';
 import D3BarChart from './D3BarChart';
 
 import data from '../../data/bway_test.json';
 import processTotals from '../../utils/processTotals';
-import Chart from './Chart';
 import ExpenseInput from './ExpenseInput';
-
-// some input for fixed weekly expenses
 
 const Visualization = () => {
   const [weeklyExpense, setWeeklyExpense] = useState(0);
-  // console.log(processTotals(data));
+  const [showCumulativeTotal, setShowCumulativeTotal] = useState(true);
+  const [showWeeklyTotal, setShowWeeklyTotal] = useState(true);
 
   const handleExpenseEntry = (e) => {
     setWeeklyExpense(() => e.target.value || 0);
@@ -27,8 +26,23 @@ const Visualization = () => {
       <D3BarChart
         data={processTotals(data, weeklyExpense)}
         dimensions={dimensions}
+        showCumulativeTotal={showCumulativeTotal}
+        showWeeklyTotal={showWeeklyTotal}
       />
-      {/* <Chart /> */}
+      <div className='display-toggle'>
+        <Switch
+          checked={showCumulativeTotal}
+          onChange={() => {
+            setShowCumulativeTotal(!showCumulativeTotal);
+          }}
+        />
+        <Switch
+          checked={showWeeklyTotal}
+          onChange={() => {
+            setShowWeeklyTotal(!showWeeklyTotal);
+          }}
+        />
+      </div>
       <ExpenseInput handleEntry={handleExpenseEntry} />
     </div>
   );

@@ -1,17 +1,26 @@
-import React from 'react';
+import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 const AXIS_COLOR = 'rgb(255, 91, 73)';
-const BAR_COLOR = '#49EDFFC0';
+const BAR_COLOR_1 = '#49EDFFC0';
+const BAR_COLOR_2 = 'white';
 
-const D3BarChart = ({ data, dimensions }) => {
-  const svgRef = React.useRef(null);
+const D3BarChart = ({
+  data,
+  dimensions,
+  showCumulativeTotal,
+  showWeeklyTotal,
+}) => {
+  const svgRef = useRef(null);
   const { svgWidth, svgHeight, margin } = dimensions;
 
   const width = svgWidth - margin.left - margin.right;
   const height = svgHeight - margin.top - margin.bottom;
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // clear previous data / refresh for state updates
+    d3.select(svgRef.current).selectAll('*').remove();
+
     // append the svg object to the body of the page
     const svg = d3
       .select(svgRef.current)
@@ -43,7 +52,10 @@ const D3BarChart = ({ data, dimensions }) => {
       .domain([
         0,
         d3.max(data, function (d) {
-          return +d.cumulativeTotal;
+          return Math.max(
+            showCumulativeTotal ? d.cumulativeTotal : d.weeklyTotal,
+            1000 // min y-top
+          );
         }),
       ])
       .range([height, 0]);
@@ -55,16 +67,30 @@ const D3BarChart = ({ data, dimensions }) => {
     yAxis.selectAll('text').style('stroke', AXIS_COLOR);
 
     // Bars
-    svg
-      .selectAll('bar')
-      .data(data)
-      .join('rect')
-      .attr('x', (d) => x(d.show_week))
-      .attr('y', (d) => y(d.cumulativeTotal))
-      .attr('width', x.bandwidth())
-      .attr('height', (d) => height - y(d.cumulativeTotal))
-      .attr('fill', BAR_COLOR);
-  }, [data]);
+    if (showCumulativeTotal) {
+      svg
+        .selectAll('bar')
+        .data(data)
+        .join('rect')
+        .attr('x', (d) => x(d.show_week))
+        .attr('y', (d) => y(d.cumulativeTotal), 0)
+        .attr('width', x.bandwidth())
+        .attr('height', (d) => height - y(d.cumulativeTotal), 0)
+        .attr('fill', BAR_COLOR_1);
+    }
+
+    if (showWeeklyTotal) {
+      svg
+        .selectAll('bar')
+        .data(data)
+        .join('rect')
+        .attr('x', (d) => x(d.show_week))
+        .attr('y', (d) => y(d.weeklyTotal))
+        .attr('width', x.bandwidth())
+        .attr('height', (d) => height - y(d.weeklyTotal))
+        .attr('fill', BAR_COLOR_2);
+    }
+  }, [data, showCumulativeTotal, showWeeklyTotal]);
 
   return (
     <svg
