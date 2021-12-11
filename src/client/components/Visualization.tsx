@@ -17,20 +17,20 @@ const Visualization = () => {
   };
 
   const dimensions = {
-    width: 460,
-    height: 400,
-    margin: { top: 30, right: 30, bottom: 70, left: 60 },
+    svgWidth: 460,
+    svgHeight: 400,
+    margin: { top: 30, right: 30, bottom: 30, left: 80 },
   };
 
   return (
-    // <div className='visualization'>
-    <D3BarChart
-      data={Object.values(processTotals(data))}
-      dimensions={dimensions}
-    />
-    //   <Chart />
-    //   <ExpenseInput handleEntry={handleExpenseEntry} />
-    // </div>
+    <div className='visualization'>
+      <D3BarChart
+        data={processTotals(data, weeklyExpense)}
+        dimensions={dimensions}
+      />
+      {/* <Chart /> */}
+      <ExpenseInput handleEntry={handleExpenseEntry} />
+    </div>
   );
 };
 

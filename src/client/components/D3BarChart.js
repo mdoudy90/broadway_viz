@@ -1,81 +1,78 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-const D3BarChart = ({ data, dimensions }) => {
-  console.log(data);
-  const svgRef = React.useRef(null);
-  const { width, height, margin } = dimensions;
+const AXIS_COLOR = 'rgb(255, 91, 73)';
+const BAR_COLOR = '#49EDFFC0';
 
-  // set the dimensions and margins of the graph
-  // const margin = { top: 10, right: 30, bottom: 30, left: 40 },
-  const newWidth = width - margin.left - margin.right,
-    newHeight = height - margin.top - margin.bottom;
+const D3BarChart = ({ data, dimensions }) => {
+  const svgRef = React.useRef(null);
+  const { svgWidth, svgHeight, margin } = dimensions;
+
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
 
   React.useEffect(() => {
     // append the svg object to the body of the page
     const svg = d3
       .select(svgRef.current)
       .append('svg')
-      .attr('width', newWidth + margin.left + margin.right)
-      .attr('height', newHeight + margin.top + margin.bottom)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // Parse the Data
-    // d3.csv(
-    //   'https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv',
-    //   function (data) {
-    //     console.log(data);
-    // X axis
-    var x = d3
+    // Add X axis
+    const x = d3
       .scaleBand()
       .range([0, width])
-      .domain(
-        data.map(function (d) {
-          return d.show_week;
-        })
-      )
-      .padding(0.2);
-    svg
+      .domain(data.map((d) => d.show_week))
+      .padding(0.25);
+
+    const xAxis = svg
       .append('g')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(d3.axisBottom(x))
-      .selectAll('text')
-      .attr('transform', 'translate(-10,0)rotate(-45)')
-      .style('text-anchor', 'end');
+      .attr('transform', `translate(0, ${height})`)
+      .call(d3.axisBottom(x));
+
+    xAxis.selectAll('line').style('stroke', AXIS_COLOR);
+    xAxis.selectAll('path').style('stroke', AXIS_COLOR);
+    xAxis.selectAll('text').style('stroke', AXIS_COLOR);
 
     // Add Y axis
-    var y = d3
+    const y = d3
       .scaleLinear()
       .domain([
         0,
         d3.max(data, function (d) {
-          return +d.weeklyTotal;
+          return +d.cumulativeTotal;
         }),
       ])
       .range([height, 0]);
-    svg.append('g').call(d3.axisLeft(y));
+
+    const yAxis = svg.append('g').call(d3.axisLeft(y));
+
+    yAxis.selectAll('line').style('stroke', AXIS_COLOR);
+    yAxis.selectAll('path').style('stroke', AXIS_COLOR);
+    yAxis.selectAll('text').style('stroke', AXIS_COLOR);
 
     // Bars
     svg
-      .selectAll('mybar')
+      .selectAll('bar')
       .data(data)
-      .enter()
-      .append('rect')
-      .attr('x', function (d) {
-        return x(d.show_week);
-      })
-      .attr('y', function (d) {
-        return y(d.weeklyTotal);
-      })
+      .join('rect')
+      .attr('x', (d) => x(d.show_week))
+      .attr('y', (d) => y(d.cumulativeTotal))
       .attr('width', x.bandwidth())
-      .attr('height', function (d) {
-        return height - y(d.weeklyTotal);
-      })
-      .attr('fill', '#69b3a2');
+      .attr('height', (d) => height - y(d.cumulativeTotal))
+      .attr('fill', BAR_COLOR);
   }, [data]);
 
-  return <svg ref={svgRef} width={width} height={height} />;
+  return (
+    <svg
+      ref={svgRef}
+      width={width + margin.left + margin.right}
+      height={height + margin.top + margin.bottom}
+    />
+  );
 };
 
 export default D3BarChart;
