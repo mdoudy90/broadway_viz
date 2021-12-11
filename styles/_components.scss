@@ -1,25 +1,110 @@
-.visualization {
-  // height: 300px;
-  // width: 500px;
+.broadway-widget {
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: min-content 1fr;
+  grid-template-rows: min-content 1fr 1fr;
+}
+
+.d3-visualization,
+.input-card,
+.stats-card,
+.legend-card {
   border: 1px solid $orange;
   background-color: rgba(255, 91, 73, 0.1);
-  border-radius: 5px;
-  padding: 10px;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: 1fr;
-  grid-template-rows: 5fr 1fr;
+  border-radius: 3px;
+  padding: 12px;
 }
 
-.expense-input {
-  background-color: rgba(0, 0, 0, 0);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0 10px;
-  color: $white;
+.input-card,
+.stats-card,
+.legend-card {
+  display: flex;
+  flex-direction: column;
+  > * + * {
+    margin-top: 10px;
+  }
 }
 
-.display-toggle {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 100%;
-  height: 100%;
+.d3-visualization {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+}
+
+.input-card {
+  &__expense-input {
+    p {
+      padding-bottom: 3px;
+      color: $orange;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    input {
+      background-color: rgba(0, 0, 0, 0);
+      border: none;
+      color: $white;
+      font-size: 16px;
+      max-width: 100px;
+      &::placeholder {
+        color: $white;
+      }
+    }
+  }
+}
+
+.stats-card {
+  &__stat {
+    color: $orange;
+    p {
+      &:first-of-type {
+        font-size: 11px;
+        font-weight: bold;
+        padding-bottom: 3px;
+      }
+      &:nth-of-type(2) {
+        color: $white;
+      }
+    }
+  }
+}
+
+.legend-card {
+  &__toggle {
+    p {
+      color: $orange;
+      font-size: 11px;
+      font-weight: bold;
+    }
+  }
+
+  .MuiSwitch-root {
+    margin-left: -11px;
+  }
+
+  &--cum-total {
+    .MuiSwitch-root {
+      .MuiSwitch-switchBase {
+        color: #adadad;
+      }
+      .Mui-checked {
+        color: #43b4c2;
+      }
+      .MuiSwitch-track {
+        background-color: #43b4c2;
+      }
+    }
+  }
+
+  &--week-total {
+    .MuiSwitch-root {
+      .MuiSwitch-switchBase {
+        color: #adadad;
+      }
+      .Mui-checked {
+        color: $white;
+      }
+      .MuiSwitch-track {
+        background-color: $white;
+      }
+    }
+  }
 }

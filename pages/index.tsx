@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
-import Visualization from '../src/client/components/Visualization';
+import BroadwayWidget from '../src/client/components/BroadwayWidget';
 
 const Home: NextPage = () => {
   return (
     <div className='home-page'>
-      <Visualization />
+      <BroadwayWidget />
     </div>
   );
 };

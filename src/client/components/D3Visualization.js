@@ -2,16 +2,12 @@ import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 const AXIS_COLOR = 'rgb(255, 91, 73)';
-const BAR_COLOR_1 = '#49EDFFC0';
-const BAR_COLOR_2 = 'white';
+const BAR_COLOR_1 = '#43b4c2';
+const BAR_COLOR_2 = '#fff';
 
-const D3BarChart = ({
-  data,
-  dimensions,
-  showCumulativeTotal,
-  showWeeklyTotal,
-}) => {
+const D3Visualization = ({ data, dimensions, displayOptions }) => {
   const svgRef = useRef(null);
+  const { showCumulativeTotal, showWeeklyTotal } = displayOptions;
   const { svgWidth, svgHeight, margin } = dimensions;
 
   const width = svgWidth - margin.left - margin.right;
@@ -93,12 +89,14 @@ const D3BarChart = ({
   }, [data, showCumulativeTotal, showWeeklyTotal]);
 
   return (
-    <svg
-      ref={svgRef}
-      width={width + margin.left + margin.right}
-      height={height + margin.top + margin.bottom}
-    />
+    <div className='d3-visualization'>
+      <svg
+        ref={svgRef}
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom}
+      />
+    </div>
   );
 };
 
-export default D3BarChart;
+export default D3Visualization;
